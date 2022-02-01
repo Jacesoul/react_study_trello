@@ -8,6 +8,7 @@ import {
 import { toDoState } from "./atoms";
 import { useRecoilState } from "recoil";
 import DraggableCard from "./components/DraggableCard";
+import Board from "./components/Board";
 
 const Wrapper = styled.div`
   display: flex;
@@ -25,20 +26,13 @@ const Boards = styled.div`
   grid-template-columns: repeat(3, 1fr);
 `;
 
-const Board = styled.div`
-  padding: 20px 10px;
-  padding-top: 30px;
-  background-color: ${(props) => props.theme.boardColor};
-  border-radius: 5px;
-  min-height: 200px;
-`;
-
 const toDos = ["a", "b", "c", "d", "e", "f"];
 
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
   const onDragEnd = ({ destination, source, draggableId }: DropResult) => {
     if (!destination) return;
+    /*
     setToDos((prevToDos) => {
       const toDosCopy = [...prevToDos];
       // 1) Delete item on source.index
@@ -47,25 +41,19 @@ function App() {
       toDosCopy.splice(destination?.index, 0, draggableId);
       return toDosCopy;
     });
+    */
   };
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Wrapper>
         <Boards>
-          <Droppable droppableId="one">
-            {(magic) => (
-              <Board ref={magic.innerRef} {...magic.droppableProps}>
-                {toDos.map((toDo, index) => (
-                  <DraggableCard
-                    key={toDo}
-                    index={index}
-                    toDo={toDo}
-                  ></DraggableCard>
-                ))}
-                {magic.placeholder}
-              </Board>
-            )}
-          </Droppable>
+          {Object.keys(toDos).map((boardId) => (
+            <Board
+              boardId={boardId}
+              key={boardId}
+              toDos={toDos[boardId]}
+            ></Board>
+          ))}
         </Boards>
       </Wrapper>
     </DragDropContext>
