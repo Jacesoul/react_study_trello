@@ -8,6 +8,14 @@ const Wrapper = styled.div`
   background-color: ${(props) => props.theme.boardColor};
   border-radius: 5px;
   min-height: 200px;
+  margin: 0 5px;
+`;
+
+const Title = styled.h2`
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 18px;
 `;
 
 interface IBoardProps {
@@ -17,16 +25,23 @@ interface IBoardProps {
 
 function Board({ toDos, boardId }: IBoardProps) {
   return (
-    <Droppable droppableId="one">
-      {(magic) => (
-        <Wrapper ref={magic.innerRef} {...magic.droppableProps}>
-          {toDos.map((toDo, index) => (
-            <DraggableCard key={toDo} index={index} toDo={toDo}></DraggableCard>
-          ))}
-          {magic.placeholder}
-        </Wrapper>
-      )}
-    </Droppable>
+    <Wrapper>
+      <Title>{boardId}</Title>
+      <Droppable droppableId={boardId}>
+        {(magic) => (
+          <Wrapper ref={magic.innerRef} {...magic.droppableProps}>
+            {toDos.map((toDo, index) => (
+              <DraggableCard
+                key={toDo}
+                index={index}
+                toDo={toDo}
+              ></DraggableCard>
+            ))}
+            {magic.placeholder}
+          </Wrapper>
+        )}
+      </Droppable>
+    </Wrapper>
   );
 }
 
